@@ -1,3 +1,45 @@
+type User = record {
+  id: nat64;
+  name: text;
+  age: text;
+  password: text;
+  phone: text;
+  date_of_birth: text;
+  current_location: text;
+};
+
+type UserPayload = record {
+  name: text;
+  age: text;
+  password: text;
+  phone: text;
+  date_of_birth: text;
+  current_location: text;
+};
+
+type Error = variant {
+  NotFound: record {
+    msg: text;
+  };
+};
+
 service : {
-    "greet": (text) -> (text) query;
-}
+  get_user_from_id: (id: nat64) -> (variant { 
+    ok: User; 
+    err: Error;
+  });
+
+  add_user: (user: UserPayload) -> (opt User);
+
+  update_user: (id: nat64, payload: UserPayload) -> (variant {
+    ok: User;
+    err: Error;
+  });
+
+  delete_user: (id: nat64) -> (variant {
+    ok: User;
+    err: Error;
+  });
+
+  // register: (data: User) -> (User);
+};

@@ -2,3 +2,5 @@
 members = [
     "src/v1_backend",
 ]
+
+resolver = "1"
