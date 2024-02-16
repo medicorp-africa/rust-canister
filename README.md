@@ -1,61 +1,54 @@
-# v1
+# Surplus Distribution System
 
-Welcome to your new v1 project and to the internet computer development community. By default, creating a new project adds this README and some template files to your project directory. You can edit these template files to customize your project and to include your own code to speed up the development cycle.
+## Overview
+This Rust program implements a simple application to allow vendors to dispose of their surplus food effectively to those in need. It also provides functionality to search for vendors, manage excess food, and add new excess items.
 
-To get started, you might want to explore the project directory structure and the default configuration file. Working with this project in your development environment will not affect any production deployment or identity tokens.
+## Components
 
-To learn more before you start working with v1, see the following documentation available online:
+### Data Structures
+- **Vendor**: Represents a cafe, hotel, or restaurant record containing fields such as ID, name, location, phone, and optional update timestamp.
+- **Excess**: Represents all excess produce used for adding or updating excess items.
+- **Error**: An enum representing various error types that can occur during operations, including not found, validation error, and insertion failure.
 
-- [Quick Start](https://internetcomputer.org/docs/current/developer-docs/setup/deploy-locally)
-- [SDK Developer Tools](https://internetcomputer.org/docs/current/developer-docs/setup/install)
-- [Rust Canister Development Guide](https://internetcomputer.org/docs/current/developer-docs/backend/rust/)
-- [ic-cdk](https://docs.rs/ic-cdk)
-- [ic-cdk-macros](https://docs.rs/ic-cdk-macros)
-- [Candid Introduction](https://internetcomputer.org/docs/current/developer-docs/backend/candid/)
+### Storage
+- **STORAGE**: A thread-local stable B-tree map storing vendor and excess food records keyed by their unique IDs.
+- **MEMORY_MANAGER**: Manages memory for the application.
+- **ID_COUNTER**: Generates unique identifiers for vendor and excess food records.
 
-If you want to start working on your project right away, you might want to try the following commands:
+### Functions
+- **get_vendor_from_id**: Retrieves a vendor record by its ID.
+- **get_excess_from_id**: Retrieves an excess food record by its ID.
+- **add_vendor**: Adds a new vendor record to the system.
+- **add_excess**: Adds a new excess food record to the system.
+- **update_vendor**: Updates an existing vendor record.
+- **delete_vendor**: Deletes a vendor record from the system.
+- **delete_excess**: Deletes an excess food record from the system.
 
+### Helper Functions
+- **do_insert**: Inserts a vendor record into the storage.
+- **do_insert_excess**: Inserts an excess food record into the storage.
+- **_get_vendor**: Retrieves a vendor record by its ID.
+- **_get_excess**: Retrieves an excess food record by its ID.
+
+## Candid Interface
+The program exports a Candid interface for interaction with the Internet Computer.
+
+## Usage
+1. Add a vendor record using `add_vendor`.
+2. Add an excess food record using `add_excess`.
+3. Retrieve a vendor record by its ID using `get_vendor_from_id`.
+4. Retrieve an excess food record by its ID using `get_excess_from_id`.
+5. Update an existing vendor record using `update_vendor`.
+6. Delete a vendor record using `delete_vendor`.
+7. Delete an excess food record using `delete_excess`.
+
+## Error Handling
+The program handles various error scenarios such as not found, validation errors, and insertion failures, providing informative error messages.
+
+## Running the Project Locally
+
+To test the project locally, you can follow these steps:
+
+1. Start the replica running in the background:
 ```bash
-cd v1/
-dfx help
-dfx canister --help
-```
-
-## Running the project locally
-
-If you want to test your project locally, you can use the following commands:
-
-```bash
-# Starts the replica, running in the background
-dfx start --background
-
-# Deploys your canisters to the replica and generates your candid interface
-dfx deploy
-```
-
-Once the job completes, your application will be available at `http://localhost:4943?canisterId={asset_canister_id}`.
-
-If you have made changes to your backend canister, you can generate a new candid interface with
-
-```bash
-npm run generate
-```
-
-at any time. This is recommended before starting the frontend development server, and will be run automatically any time you run `dfx deploy`.
-
-If you are making frontend changes, you can start a development server with
-
-```bash
-npm start
-```
-
-Which will start a server at `http://localhost:8080`, proxying API requests to the replica at port 4943.
-
-### Note on frontend environment variables
-
-If you are hosting frontend code somewhere without using DFX, you may need to make one of the following adjustments to ensure your project does not fetch the root key in production:
-
-- set`DFX_NETWORK` to `ic` if you are using Webpack
-- use your own preferred method to replace `process.env.DFX_NETWORK` in the autogenerated declarations
-  - Setting `canisters -> {asset_canister_id} -> declarations -> env_override to a string` in `dfx.json` will replace `process.env.DFX_NETWORK` with the string in the autogenerated declarations
-- Write your own `createActor` constructor
+$ dfx start --background

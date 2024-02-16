@@ -1,19 +1,28 @@
-type User = record {
+type Vendor = record {
   id: nat64;
   name: text;
-  age: text;
-  password: text;
   phone: text;
-  date_of_birth: text;
   current_location: text;
 };
 
-type UserPayload = record {
+type Excess = record {
+  id: nat64;
+  vendor_id: nat64;
   name: text;
-  age: text;
-  password: text;
+  amount: text;
+  date: text;
+};
+
+type ExcessPayload = record {
+  vendor_id: nat64;
+  name: text;
+  amount: text;
+  date: text;
+};
+
+type VendorPayload = record {
+  name: text;
   phone: text;
-  date_of_birth: text;
   current_location: text;
 };
 
@@ -24,22 +33,37 @@ type Error = variant {
 };
 
 service : {
-  get_user_from_id: (id: nat64) -> (variant { 
-    ok: User; 
-    err: Error;
+  get_Vendor_from_id: (id: nat64) -> (variant { 
+    Ok: Vendor; 
+    Err: Error;
   });
 
-  add_user: (user: UserPayload) -> (opt User);
-
-  update_user: (id: nat64, payload: UserPayload) -> (variant {
-    ok: User;
-    err: Error;
+   get_excess_from_id: (id: nat64) -> (variant { 
+    Ok: Excess; 
+    Err: Error;
   });
 
-  delete_user: (id: nat64) -> (variant {
-    ok: User;
-    err: Error;
+ 
+
+  add_Vendor: (Vendor: VendorPayload) -> (opt Vendor);
+  add_excess: (Excess: ExcessPayload) -> (opt Excess);
+
+  update_Vendor: (id: nat64, payload: VendorPayload) -> (variant {
+    Ok: Vendor;
+    Err: Error;
   });
 
-  // register: (data: User) -> (User);
+ delete_Vendor: (id: nat64) -> (variant {
+  Ok: Vendor;
+  Err: Error;
+});
+
+ delete_excess: (id: nat64) -> (variant {
+  Ok: Excess;
+  Err: Error;
+});
+
+ // List all Vendors
+ list_Vendors: () -> (vec Vendor);
+
 };
