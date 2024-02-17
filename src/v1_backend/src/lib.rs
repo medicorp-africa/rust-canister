@@ -192,6 +192,12 @@ fn get_excess_from_id(id: u64) -> Result<Excess, Error> {
 // add  a new Vendor function 
 #[ic_cdk::update]
 fn add_Vendor(Vendor: VendorPayload) ->Option<Vendor>{
+    if vendor.name.is_empty() || vendor.phone.is_empty() || vendor.current_location.is_empty() {
+        return Err(Error::InvalidInput {
+            msg: "Vendor data is incomplete".to_string(),
+        });
+    }
+    
     //generat a unique id for the Vendor ..
     let id = ID_COUNTER
         //this another definition of anonymus function with a variabe known as  the counter 
@@ -217,6 +223,12 @@ fn add_Vendor(Vendor: VendorPayload) ->Option<Vendor>{
 // add  a new Vendor function 
 #[ic_cdk::update]
 fn add_excess(Excess: ExcessPayload) ->Option<Excess>{
+    if excess.name.is_empty() || excess.amount.is_empty() || excess.date.is_empty() {
+        return Err(Error::InvalidInput {
+            msg: "Excess data is incomplete".to_string(),
+        });
+    }
+    
     //generat a unique id for the Vendor ..
     let id = ID_COUNTER
         //this another definition of anonymus function with a variabe known as  the counter 
@@ -246,6 +258,12 @@ fn add_excess(Excess: ExcessPayload) ->Option<Excess>{
 //on;y allow Vendor to update his/her phone number and the current location ..
 #[ic_cdk::update]
 fn  update_Vendor(id: u64, payload: VendorPayload) -> Result<Vendor, Error>{
+    if vendor.name.is_empty() || vendor.phone.is_empty() || vendor.current_location.is_empty() {
+        return Err(Error::InvalidInput {
+            msg: "Vendor data is incomplete".to_string(),
+        });
+    }
+
     match VENDOR_STORAGE.with(|service| service.borrow().get(&id)){
         Some(mut Vendor) =>{
             Vendor.phone            = payload.phone;
