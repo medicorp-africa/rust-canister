@@ -1,8 +1,9 @@
 #[macro_use]
 extern crate serde;
-// use serde::{Deserialize, Serialize}; // Import Deserialize and Serialize traits
+// Importing necessary libraries
+use serde::{Deserialize, Serialize}; 
 use candid::{Decode, Encode};
-// use ic_cdk::api::time;
+use ic_cdk::api::time;
 use ic_stable_structures::memory_manager::{MemoryId, MemoryManager, VirtualMemory};
 use ic_stable_structures::{BoundedStorable, Cell, DefaultMemoryImpl, StableBTreeMap, Storable};
 use std::{borrow::Cow, cell::RefCell};
@@ -97,18 +98,18 @@ impl BoundedStorable for Excess {
 
 
 thread_local! {
-    //intialise the memory manager using the default memory default configuaration 
+    //intialize the memory manager using the default memory default configuaration 
     static MEMORY_MANAGER: RefCell<MemoryManager<DefaultMemoryImpl>> = RefCell::new(
         MemoryManager::init(DefaultMemoryImpl::default())
     );
 
-    //initialise the idcell with zero 
+    //initialise the id cell with zero 
     static ID_COUNTER: RefCell<IdCell> = RefCell::new(
         IdCell::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(0))), 0)
             .expect("cannot create a counter")
     );
 
-    // will store Vendor objects indexed by u64 keys 
+     // Store Vendor objects indexed by u64 keys 
     static VENDOR_STORAGE: RefCell<StableBTreeMap<u64, Vendor, Memory>> = RefCell::new(
         StableBTreeMap::init(MEMORY_MANAGER.with(|m| m.borrow().get(MemoryId::new(1))))
     );
